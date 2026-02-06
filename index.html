@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLOANE | Premium Wellness Distribution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #ffffff;
+            --off-white: #fafafa;
+            --warm-white: #f7f6f3;
+            --light-gray: #eeede9;
+            --text-gray: #888;
+            --text-dark: #1a1a1a;
+            --text-body: #555;
+            --serif: 'EB Garamond', Georgia, serif;
+            --sans: 'DM Sans', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--sans);
+            background: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 1000;
+            border-bottom: 1px solid var(--light-gray);
+            padding: 16px 20px;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo img {
+            height: 48px;
+            width: auto;
+        }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-links a {
+            font-size: 13px;
+            text-decoration: none;
+            color: var(--text-body);
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-dark); }
+        .nav-cta {
+            font-size: 12px;
+            letter-spacing: 0.03em;
+            text-decoration: none;
+            color: var(--white);
+            background: var(--text-dark);
+            padding: 10px 20px;
+            transition: opacity 0.2s;
+        }
+        .nav-cta:hover { opacity: 0.8; }
+
+        /* Hero */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 85vh;
+        }
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 60px 60px 40px;
+            max-width: 600px;
+            margin-left: auto;
+        }
+        .hero-tag {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(36px, 4vw, 52px);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+        .hero h1 em { font-style: italic; }
+        .hero p {
+            font-size: 15px;
+            color: var(--text-body);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .hero-buttons { display: flex; gap: 12px; }
+        .btn {
+            padding: 14px 28px;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-dark {
+            background: var(--text-dark);
+            color: var(--white);
+        }
+        .btn-dark:hover { opacity: 0.85; }
+        .btn-outline {
+            border: 1px solid var(--light-gray);
+            color: var(--text-dark);
+            background: transparent;
+        }
+        .btn-outline:hover { border-color: var(--text-dark); }
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-image img {
+            width: 60%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Stats strip */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-top: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .stat {
+            text-align: center;
+            padding: 32px 20px;
+            border-right: 1px solid var(--light-gray);
+        }
+        .stat:last-child { border-right: none; }
+        .stat-num {
+            font-family: var(--serif);
+            font-size: 36px;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            letter-spacing: 0.05em;
+        }
+
+        /* Section header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-tag {
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(28px, 3vw, 38px);
+            font-weight: 400;
+        }
+
+        /* Categories */
+        .categories {
+            padding: 70px 20px;
+            background: var(--white);
+        }
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .category-card {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .category-card:hover img { transform: scale(1.04); }
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+        .category-info h3 {
+            font-family: var(--serif);
+            font-size: 22px;
+            color: var(--white);
+            font-weight: 400;
+        }
+        .category-info span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Brands */
+        .brands {
+            padding: 70px 0;
+            background: var(--warm-white);
+        }
+        .brands-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .brands-header .section-title { margin: 0; }
+        .view-all {
+            font-size: 12px;
+            color: var(--text-body);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .view-all:hover { color: var(--text-dark); }
+        .brands-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 0 20px 20px;
+            scrollbar-width: none;
+        }
+        .brands-scroll::-webkit-scrollbar { display: none; }
+        .brand-card {
+            flex: 0 0 220px;
+            background: var(--white);
+        }
+        .brand-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        .brand-card-content {
+            padding: 16px;
+        }
+        .brand-card h4 {
+            font-family: var(--serif);
+            font-size: 17px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        .brand-card p {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        /* Image + Text split sections */
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .split-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .split-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+        }
+        .split-content .section-tag { text-align: left; }
+        .split-content .section-title {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .split-content p {
+            font-size: 15px;
+            color: var(--text-body);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .split-content .btn { align-self: flex-start; margin-top: 16px; }
+
+        /* Process */
+        .process {
+            padding: 70px 20px;
+            background: var(--white);
+        }
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .process-step { text-align: center; }
+        .process-num {
+            font-family: var(--serif);
+            font-size: 40px;
+            color: var(--light-gray);
+            margin-bottom: 16px;
+        }
+        .process-step h4 {
+            font-family: var(--serif);
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .process-step p {
+            font-size: 13px;
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        /* Services */
+        .services {
+            padding: 70px 20px;
+            background: var(--warm-white);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: var(--white);
+            overflow: hidden;
+        }
+        .service-card img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+        }
+        .service-card-content {
+            padding: 20px;
+        }
+        .service-card h4 {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+        .service-card p {
+            font-size: 12px;
+            color: var(--text-body);
+            line-height: 1.5;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .testimonial-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .testimonial-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            background: var(--white);
+        }
+        .testimonial-quote {
+            font-family: var(--serif);
+            font-size: clamp(22px, 2.5vw, 28px);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+        .testimonial-author { font-size: 14px; font-weight: 500; }
+        .testimonial-role { font-size: 12px; color: var(--text-gray); }
+
+        /* CTA */
+        .cta {
+            background: var(--text-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .cta .section-title { color: var(--white); margin-bottom: 16px; }
+        .cta p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            max-width: 400px;
+            margin: 0 auto 32px;
+        }
+        .cta-buttons { display: flex; gap: 12px; justify-content: center; }
+        .btn-white {
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 14px 28px;
+            font-size: 12px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-white:hover { opacity: 0.9; }
+        .btn-ghost {
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            padding: 14px 28px;
+            font-size: 12px;
+            text-decoration: none;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--white); }
+
+        /* Footer */
+        footer {
+            background: var(--warm-white);
+            padding: 50px 20px 30px;
+            border-top: 1px solid var(--light-gray);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+        .footer-logo {
+            font-family: var(--serif);
+            font-size: 20px;
+            letter-spacing: 0.12em;
+        }
+        .footer-brand p {
+            font-size: 13px;
+            color: var(--text-body);
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s;
+        }
+        .footer-social a:hover { border-color: var(--text-dark); }
+        .footer-social svg { width: 14px; height: 14px; fill: var(--text-body); }
+        .footer-col h5 {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; }
+        .footer-col a {
+            font-size: 13px;
+            color: var(--text-body);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-col a:hover { color: var(--text-dark); }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+        .footer-legal { display: flex; gap: 20px; }
+        .footer-legal a { color: var(--text-gray); text-decoration: none; }
+        .footer-legal a:hover { color: var(--text-dark); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-content { max-width: none; padding: 50px 20px; text-align: center; margin: 0; }
+            .hero-content p { margin-left: auto; margin-right: auto; max-width: 480px; }
+            .hero-buttons { justify-content: center; }
+            .hero-image { height: 50vh; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .stat:nth-child(2) { border-right: none; }
+            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .split { grid-template-columns: 1fr; }
+            .split-image { height: 50vh; }
+            .split-content { padding: 50px 20px; text-align: center; }
+            .split-content .section-tag, .split-content .section-title { text-align: center; }
+            .split-content .btn { align-self: center; }
+            .process-grid { grid-template-columns: 1fr; gap: 30px; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonial { grid-template-columns: 1fr; }
+            .testimonial-image { height: 40vh; }
+            .testimonial-content { text-align: center; padding: 50px 20px; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 640px) {
+            .stats { grid-template-columns: 1fr; }
+            .stat { border-right: none; border-bottom: 1px solid var(--light-gray); }
+            .stat:last-child { border-bottom: none; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-social { justify-content: center; }
+            .footer-bottom { flex-direction: column; gap: 12px; align-items: center; }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="logo"><img src="https://i.postimg.cc/HnRB14PZ/Design-Master-Playbook.png" alt="Sloane"></a>
+        <ul class="nav-links">
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#brands">Brands</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Partner With Us</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content fade-in">
+        <span class="hero-tag">Premium Distribution</span>
+        <h1>The <em>curated</em> home for wellness</h1>
+        <p>We bring the world's most exceptional wellness brands to the Middle East. Carefully selected, expertly distributed.</p>
+        <div class="hero-buttons">
+            <a href="#contact" class="btn btn-dark">Become a Partner</a>
+            <a href="#brands" class="btn btn-outline">View Brands</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="https://res.cloudinary.com/dljz0lko8/image/upload/f_auto,q_auto/v1616522447/approach/Seed_Approach_GIF_01.gif" alt="Wellness products">
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+    <div class="stat fade-in">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Premium Brands</div>
+    </div>
+    <div class="stat fade-in">
+        <div class="stat-num">15</div>
+        <div class="stat-label">Countries</div>
+    </div>
+    <div class="stat fade-in">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Retail Partners</div>
+    </div>
+    <div class="stat fade-in">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Partner Retention</div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="categories" id="categories">
+    <div class="section-header fade-in">
+        <span class="section-tag">Shop by Category</span>
+        <h2 class="section-title">The Four Pillars</h2>
+    </div>
+    <div class="categories-grid">
+        <div class="category-card fade-in">
+            <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80" alt="Nourish">
+            <div class="category-overlay">
+                <div class="category-info">
+                    <h3>Nourish</h3>
+                    <span>85 brands</span>
+                </div>
+            </div>
+        </div>
+        <div class="category-card fade-in">
+            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" alt="Move">
+            <div class="category-overlay">
+                <div class="category-info">
+                    <h3>Move</h3>
+                    <span>52 brands</span>
+                </div>
+            </div>
+        </div>
+        <div class="category-card fade-in">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80" alt="Mind">
+            <div class="category-overlay">
+                <div class="category-info">
+                    <h3>Mind</h3>
+                    <span>38 brands</span>
+                </div>
+            </div>
+        </div>
+        <div class="category-card fade-in">
+            <img src="https://images.unsplash.com/photo-1515894203077-9cd36032142f?w=600&q=80" alt="Rest">
+            <div class="category-overlay">
+                <div class="category-info">
+                    <h3>Rest</h3>
+                    <span>31 brands</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Brands -->
+<section class="brands" id="brands">
+    <div class="brands-header">
+        <h2 class="section-title">Brands We Love</h2>
+        <a href="#" class="view-all">View all →</a>
+    </div>
+    <div class="brands-scroll">
+        <div class="brand-card fade-in">
+            <img src="https://i.postimg.cc/44P1vZfW/seed.jpg" alt="Seed">
+            <div class="brand-card-content">
+                <h4>Seed</h4>
+                <p>Microbiome science</p>
+            </div>
+        </div>
+        <div class="brand-card fade-in">
+            <img src="https://i.ibb.co/XfbckZYF/image.png" alt="LMNT">
+            <div class="brand-card-content">
+                <h4>LMNT</h4>
+                <p>Electrolyte hydration</p>
+            </div>
+        </div>
+        <div class="brand-card fade-in">
+            <img src="https://i.postimg.cc/C1mf8hGP/image.png" alt="Thorne">
+            <div class="brand-card-content">
+                <h4>Thorne</h4>
+                <p>Clinical supplements</p>
+            </div>
+        </div>
+        <div class="brand-card fade-in">
+            <img src="https://i.postimg.cc/htWhfQFn/oura.jpg" alt="Oura">
+            <div class="brand-card-content">
+                <h4>Oura</h4>
+                <p>Sleep technology</p>
+            </div>
+        </div>
+        <div class="brand-card fade-in">
+            <img src="https://i.postimg.cc/tTYVh02L/image.png" alt="Hyperice">
+            <div class="brand-card-content">
+                <h4>Hyperice</h4>
+                <p>Recovery tech</p>
+            </div>
+        </div>
+        <div class="brand-card fade-in">
+            <img src="https://i.postimg.cc/KYYK2SSh/image.png" alt="AG1">
+            <div class="brand-card-content">
+                <h4>AG1</h4>
+                <p>Daily nutrition</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Split -->
+<section class="split" id="about">
+    <div class="split-image">
+        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1000&q=80" alt="Team">
+    </div>
+    <div class="split-content fade-in">
+        <span class="section-tag">Why Sloane</span>
+        <h2 class="section-title">Built on trust, driven by excellence</h2>
+        <p>We believe wellness should be accessible without compromise. Every brand we represent has been tested, validated, and approved by experts who care as much about efficacy as we do.</p>
+        <p>Our partnerships aren't transactional. We invest in every brand's success, providing infrastructure, expertise, and market access to thrive in the Middle East.</p>
+        <a href="#contact" class="btn btn-dark">Start a conversation</a>
+    </div>
+</section>
+
+<!-- Process -->
+<section class="process">
+    <div class="section-header fade-in">
+        <span class="section-tag">Our Process</span>
+        <h2 class="section-title">How We Curate</h2>
+    </div>
+    <div class="process-grid">
+        <div class="process-step fade-in">
+            <div class="process-num">01</div>
+            <h4>Discovery</h4>
+            <p>Our global network identifies emerging brands with proven efficacy and exceptional quality.</p>
+        </div>
+        <div class="process-step fade-in">
+            <div class="process-num">02</div>
+            <h4>Validation</h4>
+            <p>Rigorous testing by physicians, nutritionists, and wellness experts.</p>
+        </div>
+        <div class="process-step fade-in">
+            <div class="process-num">03</div>
+            <h4>Integration</h4>
+            <p>Complete market entry support including regulatory compliance and positioning.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="services" id="services">
+    <div class="section-header fade-in">
+        <span class="section-tag">What We Offer</span>
+        <h2 class="section-title">Partnership Services</h2>
+    </div>
+    <div class="services-grid">
+        <div class="service-card fade-in">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80" alt="Retail">
+            <div class="service-card-content">
+                <h4>Retail Distribution</h4>
+                <p>End-to-end supply chain across premium retailers throughout the GCC.</p>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=500&q=80" alt="Hospitality">
+            <div class="service-card-content">
+                <h4>Hospitality & Spa</h4>
+                <p>Partnerships with luxury hotels, resorts, and destination spas.</p>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=500&q=80" alt="Regulatory">
+            <div class="service-card-content">
+                <h4>Regulatory Support</h4>
+                <p>Expert handling of registration, certifications, and compliance.</p>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" alt="Marketing">
+            <div class="service-card-content">
+                <h4>Marketing & Growth</h4>
+                <p>Strategic positioning and localized campaigns for the region.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+    <div class="testimonial-image">
+        <img src="https://i.postimg.cc/Xq9q8nFT/image.png" alt="Partner">
+    </div>
+    <div class="testimonial-content fade-in">
+        <blockquote class="testimonial-quote">"Sloane's understanding of the regional market made them the obvious choice. They don't just distribute—they build brands."</blockquote>
+        <p class="testimonial-author">Sarah Chen</p>
+        <p class="testimonial-role">VP International, Leading Wellness Brand</p>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+    <h2 class="section-title fade-in">Let's work together</h2>
+    <p class="fade-in">Whether you're a global brand or a retailer looking for premium products, we'd love to hear from you.</p>
+    <div class="cta-buttons fade-in">
+        <a href="mailto:hello@sloane.me" class="btn-white">Get in touch</a>
+        <a href="#" class="btn-ghost">Download portfolio</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <div class="footer-logo"><img src="https://i.postimg.cc/HnRB14PZ/Design-Master-Playbook.png" alt="Sloane" style="height:43px;width:auto;"></div>
+            <p>The Middle East's premier curator of exceptional wellness brands.</p>
+            <div class="footer-social">
+                <a href="https://www.instagram.com/sloanewellness/"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="https://api.whatsapp.com/send/?phone=971585817682"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+                <a href="https://www.linkedin.com/company/sloane-wellness"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h5>Categories</h5>
+            <ul>
+                <li><a href="#">Nourish</a></li>
+                <li><a href="#">Move</a></li>
+                <li><a href="#">Mind</a></li>
+                <li><a href="#">Rest</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Services</h5>
+            <ul>
+                <li><a href="#">Distribution</a></li>
+                <li><a href="#">Hospitality</a></li>
+                <li><a href="#">Partnerships</a></li>
+                <li><a href="#">Regulatory</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Contact</h5>
+            <ul>
+                <li><a href="mailto:hello@sloane.me">hello@sloane.me</a></li>
+                <li><a href="tel:+971585817682">+971 58 581 7682</a></li>
+                <li><a href="#">Dubai, UAE</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 Sloane Wellness</span>
+        <div class="footer-legal">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+
+</body>
+</html>
