@@ -1,1 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLOANE × POWDER — Merger Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #3D2B1F;
+  --mocha: #6B4F3A;
+  --latte: #A08060;
+  --cream: #F5EDE4;
+  --warm-white: #FAF7F2;
+  --gold: #C4A265;
+  --deep: #2A1D14;
+  --body-text: #000000;
+  --powder-rose: #D4A5A5;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', 'Helvetica Neue', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--sans); background: var(--warm-white); color: var(--body-text); overflow-x: hidden; }
+body::after {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
 
+/* HERO */
+.hero {
+  background: var(--espresso);
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 4rem 2rem; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(107,79,58,0.35) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(212,165,165,0.12) 0%, transparent 50%);
+  animation: drift 20s ease-in-out infinite;
+}
+@keyframes drift { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-3%,2%); } }
+.hero-lockup { position: relative; z-index: 1; display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem; }
+.hero-brand { font-family: var(--serif); font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 300; letter-spacing: 0.1em; color: #fff; }
+.hero-x { font-family: var(--serif); font-size: clamp(1.5rem,4vw,2.5rem); font-weight: 300; color: var(--gold); opacity: 0.7; }
+.hero-brand-powder { font-family: var(--serif); font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 300; letter-spacing: 0.1em; color: var(--powder-rose); }
+.hero-sub { font-family: var(--serif); font-size: clamp(1.1rem,2.5vw,1.5rem); font-weight: 300; font-style: italic; color: #fff; position: relative; z-index: 1; margin-bottom: 1.5rem; max-width: 700px; }
+.hero-meta { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: #fff; position: relative; z-index: 1; }
+.gold-line { width: 60px; height: 1px; background: var(--gold); margin: 2rem auto; position: relative; z-index: 1; }
+
+/* SHARED */
+section { padding: 6rem 2rem; }
+.inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 1rem; }
+.section-title { font-family: var(--serif); font-size: clamp(2rem,4vw,3rem); font-weight: 300; line-height: 1.2; margin-bottom: 1.5rem; }
+.section-desc { font-size: 0.9rem; font-weight: 300; line-height: 1.9; max-width: 720px; margin-bottom: 3rem; }
+
+/* LIGHT BG */
+.bg-light { background: var(--warm-white); }
+.bg-light .section-label { color: var(--gold); }
+.bg-light .section-title { color: var(--espresso); }
+.bg-light .section-title em { font-style: italic; color: var(--mocha); }
+.bg-light .section-desc { color: #000; }
+
+.bg-blush { background: #F5EDE4; }
+.bg-blush .section-label { color: var(--gold); }
+.bg-blush .section-title { color: var(--espresso); }
+.bg-blush .section-title em { font-style: italic; color: var(--mocha); }
+.bg-blush .section-desc { color: #000; }
+
+/* DARK BG — ALL TEXT WHITE */
+.bg-dark { background: var(--deep); }
+.bg-dark .section-label { color: var(--powder-rose); }
+.bg-dark .section-title { color: #fff; }
+.bg-dark .section-title em { font-style: italic; color: var(--powder-rose); }
+.bg-dark .section-desc { color: #fff; }
+
+.bg-espresso { background: var(--espresso); }
+.bg-espresso .section-label { color: var(--powder-rose); }
+.bg-espresso .section-title { color: #fff; }
+.bg-espresso .section-title em { font-style: italic; color: var(--powder-rose); }
+.bg-espresso .section-desc { color: #fff; }
+
+/* THESIS CARDS */
+.thesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 3rem; }
+.tc { padding: 2.5rem; border-top: 1px solid rgba(196,162,101,0.2); }
+.tc.light-card { background: white; }
+.tc.dark-card { background: var(--espresso); }
+.tc .tc-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 0.8rem; }
+.tc.light-card .tc-label { color: var(--gold); }
+.tc.dark-card .tc-label { color: var(--powder-rose); }
+.tc .tc-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.8rem; line-height: 1.3; }
+.tc.light-card .tc-title { color: var(--espresso); }
+.tc.dark-card .tc-title { color: #fff; }
+.tc .tc-body { font-size: 0.82rem; font-weight: 300; line-height: 1.8; }
+.tc.light-card .tc-body { color: #000; }
+.tc.dark-card .tc-body { color: #fff; }
+
+/* CONTRIBUTION CARDS */
+.contrib-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 3rem; }
+.contrib-card { padding: 2.5rem 2rem; background: rgba(255,255,255,0.04); border-top: 2px solid rgba(255,255,255,0.1); }
+.contrib-card.gold-top { border-top-color: var(--gold); }
+.contrib-card.rose-top { border-top-color: var(--powder-rose); }
+.contrib-icon { width: 48px; height: 48px; margin-bottom: 1.2rem; display: block; }
+.contrib-sub { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; display: block; }
+.contrib-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: #fff; margin-bottom: 0.8rem; line-height: 1.3; }
+.contrib-body { font-size: 0.8rem; font-weight: 300; color: #fff; line-height: 1.8; }
+.contrib-list { list-style: none; margin-top: 1rem; }
+.contrib-list li { font-size: 0.78rem; font-weight: 300; color: #fff; padding: 0.4rem 0 0.4rem 1.2rem; position: relative; line-height: 1.6; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.contrib-list li:last-child { border-bottom: none; }
+.contrib-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+
+/* FEMALE NETWORK */
+.bg-network { background: linear-gradient(135deg, var(--deep) 0%, #3D1A2E 100%); }
+.bg-network .section-label { color: var(--powder-rose); }
+.bg-network .section-title { color: #fff; }
+.bg-network .section-title em { font-style: italic; color: var(--powder-rose); }
+.bg-network .section-desc { color: #fff; }
+.network-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 3rem; }
+.nc { padding: 2.5rem 2rem; background: rgba(255,255,255,0.04); border-bottom: 2px solid rgba(212,165,165,0.3); text-align: center; }
+.nc .n-icon { width: 48px; height: 48px; margin: 0 auto 1rem; display: block; }
+.nc .n-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; color: #fff; margin-bottom: 0.6rem; }
+.nc .n-body { font-size: 0.78rem; font-weight: 300; color: #fff; line-height: 1.7; }
+.network-quote { margin-top: 4rem; padding: 3rem; background: rgba(212,165,165,0.07); border-left: 3px solid var(--powder-rose); max-width: 800px; margin-left: auto; margin-right: auto; }
+.network-quote p { font-family: var(--serif); font-size: 1.4rem; font-weight: 300; font-style: italic; color: #fff; line-height: 1.7; margin-bottom: 1rem; }
+.network-quote cite { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--powder-rose); }
+
+/* SYNERGY */
+.synergy-row { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; border-bottom: 1px solid rgba(160,128,96,0.15); padding: 1.5rem 0; }
+.s-col { font-size: 0.84rem; font-weight: 300; color: #000; }
+.s-col.left { padding-right: 2rem; }
+.s-col.right { padding-left: 2rem; }
+.s-brand { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+.s-col.left .s-brand { color: var(--gold); }
+.s-col.right .s-brand { color: var(--powder-rose); }
+.s-plus { text-align: center; color: var(--gold); font-size: 1.1rem; }
+
+/* EQUITY */
+.equity-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 3rem; }
+.eq { padding: 3rem 2rem; text-align: center; }
+.eq.founders { background: rgba(255,255,255,0.04); }
+.eq.rummana { background: var(--espresso); }
+.eq.investors { background: rgba(212,165,165,0.08); }
+.eq-pct { font-family: var(--serif); font-size: 4.5rem; font-weight: 300; line-height: 1; margin-bottom: 0.5rem; }
+.eq-pct sup { font-size: 2.5rem; }
+.eq.founders .eq-pct { color: #fff; }
+.eq.rummana .eq-pct { color: var(--gold); }
+.eq.investors .eq-pct { color: var(--powder-rose); }
+.eq-who { font-size: 0.63rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1rem; }
+.eq.founders .eq-who { color: #fff; }
+.eq.rummana .eq-who { color: var(--gold); }
+.eq.investors .eq-who { color: var(--powder-rose); }
+.eq-desc { font-size: 0.78rem; font-weight: 300; line-height: 1.7; }
+.eq.founders .eq-desc { color: #fff; }
+.eq.rummana .eq-desc { color: #fff; }
+.eq.investors .eq-desc { color: #fff; }
+
+/* BUYOUT */
+.buyout-box { margin-top: 2px; padding: 2.5rem 3rem; background: rgba(196,162,101,0.08); border: 1px solid rgba(196,162,101,0.25); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; align-items: center; }
+.buyout-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+.buyout-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: #fff; line-height: 1.3; }
+.buyout-stat { text-align: center; }
+.buyout-num { font-family: var(--serif); font-size: 2.8rem; font-weight: 300; color: var(--gold); display: block; }
+.buyout-sub { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; }
+.buyout-note { padding: 1.5rem 3rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); margin-top: 2px; }
+.buyout-note p { font-size: 0.8rem; font-weight: 300; color: #fff; line-height: 1.8; }
+.buyout-note p strong { color: #fff; font-weight: 500; }
+
+/* TERMS */
+.terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 2px; }
+.tb { padding: 2.5rem; background: rgba(255,255,255,0.03); }
+.tb-title { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; color: var(--powder-rose); margin-bottom: 1.5rem; }
+.tb ul { list-style: none; }
+.tb ul li { font-size: 0.81rem; font-weight: 300; color: #fff; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); line-height: 1.7; }
+.tb ul li:last-child { border-bottom: none; }
+.tb ul li strong { color: #fff; font-weight: 500; }
+
+/* REBRAND */
+.rebrand-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 3rem; }
+.rb { padding: 3rem 2rem; background: white; border-top: 3px solid transparent; position: relative; }
+.rb.rec { border-top-color: var(--espresso); }
+.rb-badge { position: absolute; top: 1rem; right: 1rem; font-size: 0.52rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; background: var(--espresso); color: var(--cream); padding: 0.3rem 0.7rem; }
+.rb-name { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--espresso); line-height: 1.2; margin-bottom: 1rem; }
+.rb-body { font-size: 0.78rem; font-weight: 300; color: #000; line-height: 1.8; margin-bottom: 1.5rem; }
+.rb-tag { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: #000; }
+
+/* PHASES */
+.phase { display: grid; grid-template-columns: 80px 1fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.phase-num { font-family: var(--serif); font-size: 3rem; font-weight: 300; color: rgba(196,162,101,0.3); line-height: 1; }
+.phase-timeline { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+.phase-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: #fff; margin-bottom: 0.5rem; }
+.phase-body { font-size: 0.82rem; font-weight: 300; color: #fff; line-height: 1.8; }
+.phase-bullets { margin-top: 0.8rem; list-style: none; }
+.phase-bullets li { font-size: 0.78rem; font-weight: 300; color: #fff; padding: 0.3rem 0 0.3rem 1.2rem; position: relative; line-height: 1.6; }
+.phase-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+
+/* REVENUE */
+.revenue-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 3rem; }
+.rc { padding: 2rem 1.5rem; border-left: 2px solid var(--gold); background: white; }
+.rc-num { font-family: var(--serif); font-size: 2.2rem; font-weight: 300; color: var(--espresso); margin-bottom: 0.3rem; }
+.rc-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #000; margin-bottom: 0.5rem; }
+.rc-desc { font-size: 0.78rem; font-weight: 300; color: #000; line-height: 1.6; }
+
+/* HEALF BENCHMARK */
+.healf-grid { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; margin-top: 3rem; align-items: start; }
+.healf-col { padding: 2.5rem 2rem; }
+.healf-them { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
+.healf-us { background: rgba(196,162,101,0.07); border: 1px solid rgba(196,162,101,0.2); }
+.healf-brand-label { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: #fff; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
+.healf-brand-desc { font-size: 0.62rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; margin-bottom: 1.5rem; }
+.healf-list { list-style: none; }
+.healf-list li { font-size: 0.8rem; font-weight: 300; color: #fff; padding: 0.45rem 0 0.45rem 1rem; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.5; }
+.healf-list li:last-child { border-bottom: none; }
+.healf-list li::before { content: '—'; position: absolute; left: 0; color: #fff; font-size: 0.7rem; }
+.healf-gap { color: rgba(255,100,100,0.7) !important; }
+.healf-gap::before { color: rgba(255,100,100,0.5) !important; }
+.healf-win { color: var(--gold) !important; }
+.healf-win::before { color: var(--gold) !important; }
+.healf-vs { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 0; gap: 1rem; }
+.healf-vs-line { width: 1px; flex: 1; background: linear-gradient(to bottom, transparent, rgba(196,162,101,0.3), transparent); }
+.healf-vs-text { font-family: var(--serif); font-size: 1.2rem; font-weight: 300; font-style: italic; color: rgba(196,162,101,0.4); writing-mode: vertical-rl; letter-spacing: 0.2em; }
+.healf-revenue-strip { margin-top: 2px; padding: 2.5rem 2rem; background: rgba(196,162,101,0.05); border: 1px solid rgba(196,162,101,0.15); }
+.healf-strip-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; }
+.healf-strip-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 1px; }
+.hsp { padding: 1.2rem 1rem; background: rgba(255,255,255,0.02); text-align: center; }
+.hsp-num { font-family: var(--serif); font-size: 1.4rem; font-weight: 300; color: var(--gold); margin-bottom: 0.4rem; }
+.hsp-name { font-size: 0.68rem; font-weight: 600; color: #fff; letter-spacing: 0.05em; margin-bottom: 0.4rem; line-height: 1.3; }
+.hsp-desc { font-size: 0.65rem; font-weight: 300; color: #fff; line-height: 1.4; }
+
+/* PILLARS */
+.pillars-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 3rem; }
+.pillar-card { padding: 2.5rem 2rem; background: rgba(255,255,255,0.04); border-top: 2px solid rgba(196,162,101,0.3); }
+.pillar-icon { width: 48px; height: 48px; margin-bottom: 1.2rem; display: block; }
+.pillar-num { font-family: var(--serif); font-size: 2.5rem; font-weight: 300; color: rgba(196,162,101,0.25); line-height: 1; margin-bottom: 0.3rem; }
+.pillar-name { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: #fff; margin-bottom: 1rem; letter-spacing: 0.03em; }
+.pillar-body { font-size: 0.8rem; font-weight: 300; color: #fff; line-height: 1.8; margin-bottom: 1rem; }
+.pillar-streams { list-style: none; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1rem; }
+.pillar-streams li { font-size: 0.72rem; font-weight: 300; color: #fff; padding: 0.35rem 0 0.35rem 1rem; position: relative; line-height: 1.5; }
+.pillar-streams li::before { content: '—'; position: absolute; left: 0; color: rgba(196,162,101,0.5); }
+
+/* CTA */
+.cta-wrap { background: var(--espresso); text-align: center; padding: 7rem 2rem; }
+.cta-title { font-family: var(--serif); font-size: clamp(2.5rem,5vw,4rem); font-weight: 300; color: #fff; margin-bottom: 1rem; line-height: 1.2; }
+.cta-title em { font-style: italic; color: var(--powder-rose); }
+.cta-sub { font-family: var(--serif); font-size: 1.1rem; font-style: italic; color: #fff; margin-bottom: 2.5rem; }
+
+footer { background: var(--deep); padding: 2rem; text-align: center; font-size: 0.65rem; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; color: #fff; }
+
+/* HERO PILLARS */
+.hero-pillars { display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 1; margin-top: 0.5rem; }
+.hero-pillar { text-align: center; }
+.hp-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: #fff; }
+.hero-pillar-sep { color: var(--gold); opacity: 0.4; font-size: 1.2rem; }
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .pillars-grid { grid-template-columns: 1fr 1fr; }
+  .revenue-grid { grid-template-columns: 1fr 1fr; }
+  .network-grid { grid-template-columns: 1fr 1fr; }
+  .healf-strip-grid, .healf-revenue-strip .healf-strip-grid { grid-template-columns: repeat(4,1fr) !important; }
+  .equity-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .buyout-box { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
+  .contrib-list[style*="columns:2"] { columns: 1 !important; }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  section { padding: 4rem 1.25rem; }
+  .inner { max-width: 100%; }
+  .hero { padding: 3rem 1.5rem; min-height: 80vh; }
+  .hero-lockup { flex-direction: column; gap: 0.3rem; }
+  .hero-brand, .hero-brand-powder { font-size: 2.8rem; }
+  .hero-x { font-size: 1.5rem; }
+  .hero-sub { font-size: 1rem; padding: 0 0.5rem; }
+  .hero-pillars { flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+  .hp-label { font-size: 0.6rem; letter-spacing: 0.3em; }
+
+  .section-title { font-size: 1.8rem; }
+  .section-desc { font-size: 0.85rem; line-height: 1.8; }
+
+  .thesis-grid,
+  .equity-grid,
+  .rebrand-grid,
+  .revenue-grid,
+  .terms-grid,
+  .contrib-grid,
+  .network-grid,
+  .pillars-grid { grid-template-columns: 1fr; }
+
+  .healf-grid { grid-template-columns: 1fr; }
+  .healf-vs { flex-direction: row; padding: 1.5rem 0; }
+  .healf-vs-line { height: 1px; width: 100%; background: linear-gradient(to right, transparent, rgba(196,162,101,0.3), transparent); }
+  .healf-vs-text { writing-mode: horizontal-tb; font-size: 1rem; }
+
+  .healf-strip-grid,
+  .healf-revenue-strip .healf-strip-grid { grid-template-columns: 1fr 1fr !important; }
+  .hsp { padding: 1rem 0.8rem; }
+  .hsp-num { font-size: 1.1rem; }
+  .hsp-name { font-size: 0.62rem; }
+
+  .synergy-row { grid-template-columns: 1fr; gap: 0.8rem; padding: 1.5rem 0; }
+  .s-col.left, .s-col.right { padding: 0; }
+  .s-plus { font-size: 0.9rem; text-align: left; }
+
+  .buyout-box { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 1.5rem; text-align: center; }
+  .buyout-title { font-size: 1.2rem; }
+  .buyout-note { padding: 1.2rem 1.5rem; }
+
+  .phase { grid-template-columns: 1fr; gap: 1rem; }
+  .phase-num { font-size: 2rem; }
+
+  .eq-pct { font-size: 3.5rem; }
+  .eq-pct sup { font-size: 2rem; }
+
+  .rb-name { font-size: 1.6rem; }
+
+  .rc { padding: 1.5rem 1.2rem; }
+  .rc-num { font-size: 1.8rem; }
+
+  .contrib-card { padding: 2rem 1.5rem; }
+  .contrib-card[style*="grid-column"] { grid-column: auto !important; }
+  .contrib-list[style*="columns:2"] { columns: 1 !important; }
+
+  .network-quote { padding: 2rem 1.5rem; }
+  .network-quote p { font-size: 1.1rem; }
+
+  .pillar-card { padding: 2rem 1.5rem; }
+  .pillar-name { font-size: 1.3rem; }
+
+  .cta-wrap { padding: 5rem 1.5rem; }
+  .cta-title { font-size: 2rem; }
+  .cta-sub { font-size: 0.95rem; }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 400px) {
+  .hero-brand, .hero-brand-powder { font-size: 2.2rem; }
+  .hero { min-height: 70vh; padding: 2.5rem 1rem; }
+  section { padding: 3rem 1rem; }
+  .healf-strip-grid,
+  .healf-revenue-strip .healf-strip-grid { grid-template-columns: 1fr !important; }
+  .section-title { font-size: 1.5rem; }
+  .eq-pct { font-size: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="passGate" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:2rem;transition:opacity 0.6s ease;">
+  <div style="text-align:center;max-width:380px;width:100%;">
+    <div style="font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;color:#fff;letter-spacing:0.08em;margin-bottom:0.3rem;">SLOANE <span style="color:var(--gold);opacity:0.7;font-size:0.7em;">×</span> <span style="color:var(--powder-rose);">POWDER</span></div>
+    <div style="font-size:0.6rem;font-weight:500;letter-spacing:0.4em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:3rem;">Confidential Document</div>
+    <div style="position:relative;">
+      <input id="passInput" type="password" placeholder="Enter password" autocomplete="off" style="width:100%;padding:1rem 1.2rem;font-family:var(--sans);font-size:0.85rem;font-weight:300;letter-spacing:0.1em;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='rgba(196,162,101,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+    </div>
+    <button id="passBtn" style="width:100%;margin-top:1rem;padding:0.9rem;font-family:var(--sans);font-size:0.7rem;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;background:var(--gold);color:var(--deep);border:none;cursor:pointer;transition:opacity 0.3s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Access Document</button>
+    <p id="passErr" style="margin-top:1rem;font-size:0.72rem;font-weight:300;color:rgba(255,100,100,0.8);min-height:1.2em;"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Password is stored base64-encoded, never in plaintext
+  // At runtime: decode → SHA-256 hash → store hash → discard decoded value
+  // User input is also SHA-256 hashed before comparison
+  const _k='cG93ZGVyc2xvYW5lMjAyNg==';
+  let _h='';
+
+  async function sha256(m){
+    const d=new TextEncoder().encode(m);
+    const b=await crypto.subtle.digest('SHA-256',d);
+    return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Derive and store the expected hash on load
+  (async()=>{
+    const decoded=atob(_k);
+    _h=await sha256(decoded);
+  })();
+
+  async function tryPass(){
+    const el=document.getElementById('passInput');
+    const v=el.value;
+    if(!v){document.getElementById('passErr').textContent='Please enter a password.';return;}
+    const inputHash=await sha256(v);
+    if(inputHash===_h){
+      const g=document.getElementById('passGate');
+      g.style.opacity='0';
+      setTimeout(()=>{g.style.display='none';document.body.style.overflow='';},600);
+    } else {
+      document.getElementById('passErr').textContent='Incorrect password. Please try again.';
+      el.value='';
+      el.style.borderColor='rgba(255,100,100,0.5)';
+      setTimeout(()=>{el.style.borderColor='rgba(255,255,255,0.12)';},1500);
+    }
+  }
+
+  document.getElementById('passBtn').addEventListener('click',tryPass);
+  document.getElementById('passInput').addEventListener('keydown',function(e){if(e.key==='Enter')tryPass();});
+  // Prevent scrolling while gate is visible
+  document.body.style.overflow='hidden';
+})();
+</script>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lockup">
+    <div class="hero-brand">SLOANE</div>
+    <div class="hero-x">×</div>
+    <div class="hero-brand-powder">POWDER</div>
+  </div>
+  <p class="hero-sub">The GCC's answer to HEALF — localised, female-led, and built across every pocket of wellness revenue the region has to offer.</p>
+  <div class="gold-line"></div>
+  <div class="hero-pillars">
+    <div class="hero-pillar">
+      <div class="hp-label">Retail</div>
+    </div>
+    <div class="hero-pillar-sep">·</div>
+    <div class="hero-pillar">
+      <div class="hp-label">Distribution</div>
+    </div>
+    <div class="hero-pillar-sep">·</div>
+    <div class="hero-pillar">
+      <div class="hp-label">Memberships</div>
+    </div>
+    <div class="hero-pillar-sep">·</div>
+    <div class="hero-pillar">
+      <div class="hp-label">Content</div>
+    </div>
+  </div>
+  <div class="gold-line" style="margin-top:2rem;"></div>
+  <p class="hero-meta">Confidential · February 2026 · For Discussion Purposes</p>
+</section>
+
+<!-- THESIS -->
+<section class="bg-blush">
+  <div class="inner">
+    <div class="section-label">The Opportunity</div>
+    <div class="section-title">Two platforms.<br><em>One movement.</em></div>
+    <div class="section-desc">Sloane brings premium distribution infrastructure, an extraordinary network of powerful women investors and leaders, and institutional-grade partnerships. Powder brings something equally rare — brilliant female founders with deep, hard-won expertise in this exact sector: consumer purchasing behaviour, clean beauty curation, and the operational knowledge of running a live, scaling business across six GCC markets. Together, we become the GCC's defining premium wellness platform — built entirely by and for women.</div>
+    <div class="thesis-grid">
+      <div class="tc light-card">
+        <div class="tc-label">Sloane Brings</div>
+        <div class="tc-title">The Relationships, Strategy & Network — Ready to Execute</div>
+        <div class="tc-body">The strategy is built. The relationships are live. Zedwell Hotels is signed. Aldar Properties and Arada are in conversation for GCC residential wellness. Salam International — one of the region's largest distribution groups — is a strategic partner for warehouse infrastructure, investing capital in exchange for a winning margin fee, meaning zero capex for the merged entity. Vitality Capital's institutional LP network, a powerful wealthy female network, and a brand pipeline ready to scale. What's missing is the operational team to execute at speed. Powder is that team.</div>
+      </div>
+      <div class="tc dark-card">
+        <div class="tc-label">Powder Brings</div>
+        <div class="tc-title">Brilliant Female Leaders &<br>Operational Expertise</div>
+        <div class="tc-body">Two exceptional female founders who have built and are actively running one of the GCC's most trusted conscious beauty platforms. They bring rare operational intelligence — deep knowledge of this consumer, how she purchases, what she trusts, and what converts. A live e-commerce business across UAE, Saudi, Oman, Bahrain, Qatar & Kuwait. UAE Trade Licence. BNPL integrations (Tabby, Tamara). 100+ supplier relationships. The institutional knowledge of actually doing this, at scale, in this market.</div>
+      </div>
+      <div class="tc light-card">
+        <div class="tc-label">The Gap</div>
+        <div class="tc-title">HEALF does not exist in the GCC. Yet.</div>
+        <div class="tc-body">HEALF built a $100M wellness platform in the UK in four years. The GCC wellness market is growing at 12%+ annually and has no equivalent — no premium, editorially-led, culturally-intelligent wellness platform. The merged entity fills that gap with 7 distinct revenue streams, six live markets, and a female-led network that HEALF cannot replicate.</div>
+      </div>
+      <div class="tc dark-card">
+        <div class="tc-label">The Trajectory</div>
+        <div class="tc-title">$100M in 4 Years — In One Market. We Have Six.</div>
+        <div class="tc-body">HEALF proved the model. We take the same editorial-led, curated wellness playbook, localise it for a culturally distinct and underserved GCC consumer, and layer in B2B revenue — hotels, airlines, brand incubation — that HEALF doesn't have. Series A from GCC family offices. Strategic acquisition from Chalhoub Group or GMG. A 3–5 year exit narrative with genuine institutional conviction behind it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUR PILLARS -->
+<section class="bg-espresso">
+  <div class="inner">
+    <div class="section-label">Business Architecture</div>
+    <div class="section-title">Four pillars.<br><em>One platform.</em></div>
+    <div class="section-desc">Every revenue stream maps to one of four pillars. HEALF has one. We have all four — live, in pipeline, and with the partnerships to execute each at institutional scale across the GCC.</div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <svg class="pillar-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 42V22l18-10 18 10v20" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="20" y="30" width="7" height="12" stroke="#C4A265" stroke-width="1.3"/>
+          <rect x="31" y="26" width="7" height="16" stroke="#C4A265" stroke-width="1.3"/>
+          <line x1="10" y1="42" x2="46" y2="42" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="pillar-num">01</div>
+        <div class="pillar-name">Retail</div>
+        <div class="pillar-body">Powder's live 6-market GCC e-commerce platform. 100+ curated conscious brands. Tabby and Tamara BNPL. The Sloane VIP box subscriber base migrated as a premium tier. Clean beauty and wellness retail, curation-led and community-backed.</div>
+        <ul class="pillar-streams">
+          <li>DTC e-commerce — UAE, Saudi, Oman, Bahrain, Qatar, Kuwait</li>
+          <li>VIP wellness boxes — Dubai, KSA, Qatar (scaling to 1,000/month)</li>
+          <li>Barrière brand retail — GMG + 10 retailers in discussion</li>
+        </ul>
+      </div>
+      <div class="pillar-card">
+        <svg class="pillar-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="20" width="40" height="8" rx="2" stroke="#C4A265" stroke-width="1.5"/>
+          <rect x="14" y="28" width="28" height="6" stroke="#C4A265" stroke-width="1.2" opacity="0.5"/>
+          <path d="M16 34v8M28 34v8M40 34v8" stroke="#C4A265" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M10 42h36" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="28" cy="13" r="4" stroke="#D4A5A5" stroke-width="1.3"/>
+          <path d="M24 13l-8-4M32 13l8-4" stroke="#D4A5A5" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+        <div class="pillar-num">02</div>
+        <div class="pillar-name">Distribution</div>
+        <div class="pillar-body">The infrastructure play. Salam International provides warehouse capital and logistics in exchange for a winning margin fee — zero capex for the merged entity. Hotels, airlines, and residential properties distribute product at institutional scale.</div>
+        <ul class="pillar-streams">
+          <li>Salam International — warehouse network, margin-fee model, zero capex</li>
+          <li>Zedwell Hotels — 2,000+ rooms, London (live)</li>
+          <li>Aldar Properties + Arada — GCC residential wellness (in conversation)</li>
+          <li>Emirates Airline — $14.7M Year 1 potential</li>
+        </ul>
+      </div>
+      <div class="pillar-card">
+        <svg class="pillar-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="18" stroke="#C4A265" stroke-width="1.5"/>
+          <circle cx="28" cy="28" r="10" stroke="#C4A265" stroke-width="1.2" opacity="0.4"/>
+          <circle cx="28" cy="28" r="3" fill="#C4A265" opacity="0.6"/>
+          <path d="M28 10v4M28 42v4M10 28h4M42 28h4" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+        <div class="pillar-num">03</div>
+        <div class="pillar-name">Memberships</div>
+        <div class="pillar-body">Recurring revenue through tiered subscriber relationships. VIP wellness box subscribers. WealthyWomen.us membership community. Future diagnostic wellness tier — bio-individual data powering personalised recommendations for the GCC consumer. High LTV, high margin, compounding.</div>
+        <ul class="pillar-streams">
+          <li>VIP box subscription — premium tier, 5× product value</li>
+          <li>WealthyWomen.us — philanthropic membership + events access</li>
+          <li>Diagnostic wellness tier — AI personalisation roadmap (Year 2)</li>
+        </ul>
+      </div>
+      <div class="pillar-card">
+        <svg class="pillar-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="14" width="40" height="26" rx="3" stroke="#C4A265" stroke-width="1.5"/>
+          <path d="M8 20h40" stroke="#C4A265" stroke-width="1.2" opacity="0.4"/>
+          <path d="M23 33l-5-3.5 5-3.5v7z" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(196,162,101,0.2)"/>
+          <path d="M27 30h8M27 34h6" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M22 40v4M34 40v4" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+          <path d="M18 44h20" stroke="#C4A265" stroke-width="1.3" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+        <div class="pillar-num">04</div>
+        <div class="pillar-name">Content</div>
+        <div class="pillar-body">The highest-margin revenue stream. Full-day brand takeovers on @sloanewellness + The Powder Room editorial. Combined platform becomes the GCC's most credible editorial voice in women's wellness — commanding premium rates from global brands targeting this consumer.</div>
+        <ul class="pillar-streams">
+          <li>Brand takeovers — $45K+/month at full capacity</li>
+          <li>The Powder Room editorial — community-trusted curation</li>
+          <li>WealthyWomen.us event content — premium sponsorship revenue</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HEALF BENCHMARK -->
+<section class="bg-dark">
+  <div class="inner">
+    <div class="section-label">The Benchmark</div>
+    <div class="section-title">The GCC's answer<br><em>to HEALF</em></div>
+    <div class="section-desc">HEALF built a $100M wellness platform in the UK in under four years. The GCC wellness market is larger, faster-growing, and has no equivalent. Sloane × Powder is built to be exactly that — but with more revenue pockets, deeper cultural intelligence, and a female-led advantage that HEALF cannot replicate.</div>
+
+    <div class="healf-grid">
+
+      <div class="healf-col healf-them">
+        <div class="healf-brand-label">HEALF</div>
+        <div class="healf-brand-desc">UK · Founded 2021 · $100M Revenue · 325K customers · 282K Instagram</div>
+        <ul class="healf-list">
+          <li>Premium curated wellness e-commerce</li>
+          <li>4,000+ products across Eat, Move, Mind, Sleep</li>
+          <li>Editorial-led content and community</li>
+          <li>Healf Zone: blood testing + AI personalisation</li>
+          <li>Deliveroo partnership for rapid delivery</li>
+          <li>Claudia Schiffer investor & ambassador</li>
+          <li>Expanding to Europe and US</li>
+          <li class="healf-gap">No GCC presence</li>
+          <li class="healf-gap">No B2B hotel or airline channel</li>
+          <li class="healf-gap">No Shariah-compliant positioning</li>
+          <li class="healf-gap">No philanthropic DAF vehicle</li>
+          <li class="healf-gap">Single geography, single revenue model</li>
+        </ul>
+      </div>
+
+      <div class="healf-vs">
+        <div class="healf-vs-line"></div>
+        <div class="healf-vs-text">vs</div>
+        <div class="healf-vs-line"></div>
+      </div>
+
+      <div class="healf-col healf-us">
+        <div class="healf-brand-label" style="color:var(--gold);">SLOANE × POWDER</div>
+        <div class="healf-brand-desc">GCC · 2026 · 6 Markets · Women-Led · Multi-Revenue Architecture</div>
+        <ul class="healf-list">
+          <li>Premium curated wellness + clean beauty e-commerce</li>
+          <li>100+ conscious brands across Beauty, Wellness, Supplements</li>
+          <li>Editorial-led content platform — @sloanewellness + The Powder Room</li>
+          <li>AI product discovery via Kunfa.AI integration potential</li>
+          <li>Tabby + Tamara BNPL — GCC-native checkout</li>
+          <li>Rummana Dada — Shark Tank, $300M AUM, female network</li>
+          <li>UAE, Saudi, Oman, Bahrain, Qatar, Kuwait — live and operational</li>
+          <li class="healf-win">B2B hotel white-label: Zedwell + GCC pipeline</li>
+          <li class="healf-win">Emirates Airline wellness boxes — $14.7M Year 1 potential</li>
+          <li class="healf-win">Shariah-compliant, culturally intelligent by design</li>
+          <li class="healf-win">WealthyWomen.us DAF — philanthropic capital + events</li>
+          <li class="healf-win">7 distinct revenue streams vs HEALF's one</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="healf-revenue-strip">
+      <div class="healf-strip-label">Our 8 Revenue Pockets — All Active or In Pipeline</div>
+      <div class="healf-strip-grid" style="grid-template-columns: repeat(8,1fr);">
+        <div class="hsp">
+          <div class="hsp-num">01</div>
+          <div class="hsp-name">DTC E-Commerce</div>
+          <div class="hsp-desc">Powder's live 6-market GCC store</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">02</div>
+          <div class="hsp-name">VIP Wellness Boxes</div>
+          <div class="hsp-desc">Sloane subscribers · Dubai · KSA · Qatar</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">03</div>
+          <div class="hsp-name">Content &amp; Memberships</div>
+          <div class="hsp-desc">Brand takeovers + subscriber tiers</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">04</div>
+          <div class="hsp-name">Hotel Distribution</div>
+          <div class="hsp-desc">Zedwell live · Aldar · Arada pipeline</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">05</div>
+          <div class="hsp-name">Airline Wellness</div>
+          <div class="hsp-desc">Emirates pipeline · $14.7M Year 1</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">06</div>
+          <div class="hsp-name">Salam Distribution</div>
+          <div class="hsp-desc">Warehouse network · margin fee · zero capex</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">07</div>
+          <div class="hsp-name">Brand Incubation</div>
+          <div class="hsp-desc">Barrière · GMV · 10 retailers active</div>
+        </div>
+        <div class="hsp">
+          <div class="hsp-num">08</div>
+          <div class="hsp-name">Philanthropic Events</div>
+          <div class="hsp-desc">WealthyWomen.us DAF · events + sponsorship</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT SLOANE CONTRIBUTES — DEEP DIVE -->
+<section class="bg-dark">
+  <div class="inner">
+    <div class="section-label">Deep Dive</div>
+    <div class="section-title">What Sloane<br><em>brings to the table</em></div>
+    <div class="section-desc">A 30% equity contribution is not financial capital alone — it is a constellation of assets, relationships, and access that would take Powder years and millions of dollars to build independently.</div>
+
+    <div class="contrib-grid">
+
+      <div class="contrib-card gold-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 34h36M8 34L6 16l10 8 8-12 8 12 10-8-2 18" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="15" r="2" fill="#C4A265"/>
+          <circle cx="24" cy="10" r="2" fill="#C4A265"/>
+          <circle cx="42" cy="15" r="2" fill="#C4A265"/>
+          <path d="M10 37h28v3H10z" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="contrib-sub">Rummana Dada · Personal Brand & Track Record</span>
+        <div class="contrib-title">Shark Tank Founder. Fashion Pioneer. Investor.</div>
+        <div class="contrib-body">Rummana founded the world's largest modest fashion platform — acquired in 2018 — and created London Modest Fashion Week, building a global commercial category from nothing. Her Shark Tank appearance brought international credibility and media visibility at the highest level. As Managing Partner of Vitality Capital ($300M+ AUM), she brings a portfolio of institutional investor relationships and a track record of building businesses to exit. This personal brand is a board-level asset that unlocks conversations Powder cannot currently access.</div>
+      </div>
+
+      <div class="contrib-card rose-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="3" fill="#D4A5A5"/>
+          <circle cx="8" cy="12" r="2.5" stroke="#D4A5A5" stroke-width="1.2"/>
+          <circle cx="40" cy="12" r="2.5" stroke="#D4A5A5" stroke-width="1.2"/>
+          <circle cx="8" cy="36" r="2.5" stroke="#D4A5A5" stroke-width="1.2"/>
+          <circle cx="40" cy="36" r="2.5" stroke="#D4A5A5" stroke-width="1.2"/>
+          <circle cx="24" cy="6" r="2" stroke="#C4A265" stroke-width="1.2"/>
+          <circle cx="24" cy="42" r="2" stroke="#C4A265" stroke-width="1.2"/>
+          <line x1="24" y1="21" x2="10" y2="13.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.6"/>
+          <line x1="24" y1="21" x2="38" y2="13.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.6"/>
+          <line x1="24" y1="27" x2="10" y2="34.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.6"/>
+          <line x1="24" y1="27" x2="38" y2="34.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.6"/>
+          <line x1="24" y1="21" x2="24" y2="8" stroke="#C4A265" stroke-width="0.8" opacity="0.6"/>
+          <line x1="24" y1="27" x2="24" y2="40" stroke="#C4A265" stroke-width="0.8" opacity="0.6"/>
+          <line x1="10.5" y1="13.5" x2="10.5" y2="34.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.3"/>
+          <line x1="37.5" y1="13.5" x2="37.5" y2="34.5" stroke="#D4A5A5" stroke-width="0.8" opacity="0.3"/>
+        </svg>
+        <span class="contrib-sub">The Female Network · The Most Valuable Asset in This Deal</span>
+        <div class="contrib-title">Powerful. Wealthy. Global. Exclusively Female.</div>
+        <div class="contrib-body">This is what makes the merger extraordinary. Rummana's network is not a contact list — it is a curated constellation of the most influential and wealthy women in global business, capital, and culture. Access to this network means warm introductions that transform Powder's growth trajectory overnight:</div>
+        <ul class="contrib-list">
+          <li>GCC royal family connections and female wealth principals at major family offices</li>
+          <li>Saudi and Emirati HNW women who are the Series A audience — not cold outreach</li>
+          <li>Female C-suite leaders at Chalhoub Group, Landmark, GMG, and Alshaya</li>
+          <li>Saudi Vision 2030 stakeholders and women's entrepreneurship councils</li>
+          <li>Global female VC network — London, New York, and Gulf cross-connections</li>
+          <li>WealthyWomen.us — registered philanthropic org with DAF vehicle for events, women's health programming, and capital mobilisation</li>
+          <li>Media gatekeepers — Vogue Arabia, Harper's Bazaar Arabia, Grazia Middle East</li>
+          <li>London Modest Fashion Week alumni network across 45+ countries</li>
+        </ul>
+      </div>
+
+      <div class="contrib-card gold-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 28l5-2 6 4 14-14 3 1-12 16-4-1-1-4z" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 18l8-8c2-2 5-2 6 0s1 4-1 6l-8 8" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 38l8-4" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <path d="M12 40l6-2" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+        </svg>
+        <span class="contrib-sub">Pipeline Asset · Emirates Airline</span>
+        <div class="contrib-title">$14.7M Year 1 Revenue Potential</div>
+        <div class="contrib-body">A co-branded wellness box programme for Emirates Business and First Class passengers. 56M+ passengers annually. At just 5% penetration: 420,000 premium wellness boxes at $35 revenue per unit. This single contract transforms the company's ARR and makes the platform highly attractive for strategic acquisition. The combined entity — UAE Trade Licence, GCC regulatory standing, Powder's 100+ brand portfolio — makes this a deliverable proposal, not just a pipeline item. Rummana's female network provides the warm introduction.</div>
+        <ul class="contrib-list">
+          <li>Estimated Year 1 revenue: $14.7M at 5% passenger penetration</li>
+          <li>Powder's brand curation and logistics enables immediate fulfilment viability</li>
+          <li>Co-brand elevates Powder and Emirates' sustainability credentials</li>
+          <li>Opens Dnata, flydubai, and Air Arabia as natural follow-on opportunities</li>
+        </ul>
+      </div>
+
+      <div class="contrib-card rose-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="14" width="32" height="26" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M8 14l16-6 16 6" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="14" y="22" width="5" height="5" stroke="#C4A265" stroke-width="1.2"/>
+          <rect x="29" y="22" width="5" height="5" stroke="#C4A265" stroke-width="1.2"/>
+          <rect x="21" y="28" width="6" height="12" stroke="#C4A265" stroke-width="1.2"/>
+          <line x1="24" y1="8" x2="24" y2="4" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="8" y1="40" x2="40" y2="40" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="contrib-sub">Live Contract · Hotel White-Label Programme</span>
+        <div class="contrib-title">Zedwell · Aldar · Arada — Property & Hotel Pipeline</div>
+        <div class="contrib-body">Sloane's relationships span hospitality and residential real estate — two of the GCC's fastest-growing distribution channels for wellness. Zedwell Hotels (2,000+ rooms, London) is the live hotel programme. Aldar Properties — Abu Dhabi's largest developer — and Arada, the developer behind Aljada and Masaar in Sharjah, are both in active conversation for wellness product placement across residential communities. This is a distribution channel that Powder's product network can fulfil immediately.</div>
+        <ul class="contrib-list">
+          <li>Zedwell Hotels — 2,000+ rooms across 5+ London locations (live)</li>
+          <li>Aldar Properties — Abu Dhabi's largest developer, wellness in-residence pipeline</li>
+          <li>Arada — Aljada + Masaar communities, Sharjah, UAE (in conversation)</li>
+          <li>Monthly recurring fee per room/unit — predictable B2B revenue</li>
+          <li>QR-to-reorder drives DTC conversion directly back to Powder platform</li>
+          <li>Blueprint to approach EMAAR, DAMAC, Nakheel — same model</li>
+        </ul>
+      </div>
+
+      <div class="contrib-card gold-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="11" y="11" width="26" height="26" rx="6" stroke="#C4A265" stroke-width="1.5"/>
+          <path d="M24 18v12M18 24h12" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="2" fill="#C4A265" opacity="0.4"/>
+          <path d="M16 8c0 0 3 2 8 2s8-2 8-2" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <path d="M16 40c0 0 3-2 8-2s8 2 8 2" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+        <span class="contrib-sub">Brand Incubation · Barrière</span>
+        <div class="contrib-title">Transdermal Vitamin Patches — 11 Retailers in Discussion</div>
+        <div class="contrib-body">Barrière is Sloane's first incubated brand — premium transdermal vitamin patches positioned for the GCC wellness consumer. Currently in active discussions with GMG Group and 10 additional major regional retailers. Listing on Powder's e-commerce accelerates DTC while retail negotiations close. Barrière is the prototype for a brand incubation model the merged entity can replicate: Powder identifies community-validated brands; Sloane incubates and distributes them at institutional scale.</div>
+      </div>
+
+      <div class="contrib-card rose-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="20" width="32" height="22" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="6" y="14" width="36" height="8" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="24" y1="14" x2="24" y2="42" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M24 14c0 0-4-8 0-8s4 8 0 8" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M24 14c0 0 4-8 0-8" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="contrib-sub">Distribution · Sloane VIP Wellness Box</span>
+        <div class="contrib-title">100 VIP Boxes/Month · Dubai, Saudi & Qatar</div>
+        <div class="contrib-body">An established VIP wellness box subscriber base reaching high-net-worth recipients across the three most affluent GCC markets. Each box delivers 5x product value to subscribers while generating brand partnership revenue. This is not just a revenue stream — it is a curated, captive audience of exactly the premium wellness consumer that Powder's brand partners most want to access. Merging this with Powder's community creates the most valuable conscious beauty audience in the region.</div>
+      </div>
+
+      <div class="contrib-card gold-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="6" y1="38" x2="42" y2="38" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="6" y1="42" x2="42" y2="42" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+          <rect x="11" y="20" width="4" height="18" stroke="#C4A265" stroke-width="1.2"/>
+          <rect x="19" y="20" width="4" height="18" stroke="#C4A265" stroke-width="1.2"/>
+          <rect x="27" y="20" width="4" height="18" stroke="#C4A265" stroke-width="1.2"/>
+          <rect x="35" y="20" width="4" height="18" stroke="#C4A265" stroke-width="1.2"/>
+          <path d="M8 20h32" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M10 20L24 8l14 12" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="contrib-sub">Vitality Capital · Institutional Network</span>
+        <div class="contrib-title">$300M+ AUM · Strategic LP Relationships</div>
+        <div class="contrib-body">Vitality Capital's LP and portfolio relationships bring institutional gravitas to the merged entity's fundraising narrative. Strategic partnerships include LG Electronics, Korea Development Bank, NY Green Bank, and Toyota Boshoku. This network opens co-investment conversations, distribution partnerships, and Series A relationships that a consumer-facing platform cannot otherwise access independently.</div>
+        <ul class="contrib-list">
+          <li>Saudi Industrial Development Fund (SIDF) — warm pipeline introduction</li>
+          <li>Qatar Development Bank — institutional anchor candidate</li>
+          <li>Korea Development Bank — potential Series A cornerstone investor</li>
+          <li>NY Green Bank — ESG and sustainability capital positioning</li>
+        </ul>
+      </div>
+
+      <div class="contrib-card gold-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="28" width="36" height="12" rx="2" stroke="#C4A265" stroke-width="1.5"/>
+          <rect x="10" y="20" width="28" height="10" rx="1" stroke="#C4A265" stroke-width="1.3" opacity="0.6"/>
+          <rect x="14" y="13" width="20" height="9" rx="1" stroke="#C4A265" stroke-width="1.2" opacity="0.35"/>
+          <path d="M18 40v4M30 40v4" stroke="#C4A265" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+          <path d="M14 44h20" stroke="#C4A265" stroke-width="1.3" stroke-linecap="round" opacity="0.4"/>
+          <circle cx="38" cy="22" r="5" stroke="#D4A5A5" stroke-width="1.2"/>
+          <path d="M36 22l1.5 1.5L40 20" stroke="#D4A5A5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="contrib-sub">Strategic Infrastructure · Salam International</span>
+        <div class="contrib-title">Warehouse Network — Zero Capex, Winning Margin Model</div>
+        <div class="contrib-body">Salam International is one of the GCC's most established distribution and retail infrastructure groups. Sloane's relationship with Salam creates a uniquely capital-efficient distribution architecture: Salam invests in and operates the warehouse and logistics infrastructure; the merged entity takes a winning margin fee on every unit moved through the network. This means the combined Sloane × Powder platform gains GCC-wide distribution infrastructure without deploying a single dirham of capex — a structural advantage that no competitor can replicate quickly.</div>
+        <ul class="contrib-list">
+          <li>Salam International funds and operates the warehouse infrastructure</li>
+          <li>Sloane × Powder earns a winning margin fee on all product moved</li>
+          <li>Zero capital expenditure for the merged entity — pure margin upside</li>
+          <li>Immediate access to Salam's existing GCC logistics network</li>
+          <li>Enables same-day and next-day delivery across UAE and KSA</li>
+          <li>Positions merged entity for Healf-style Deliveroo/rapid delivery partnership</li>
+        </ul>
+      </div>
+
+      <div class="contrib-card rose-top">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="6" width="16" height="28" rx="3" stroke="#C4A265" stroke-width="1.5"/>
+          <line x1="22" y1="30" x2="26" y2="30" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M8 18c0-6.6 5.4-12 12-12M40 18c0-6.6-5.4-12-12-12" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M11 22c0-4.4 5.8-8 13-8s13 3.6 13 8" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+          <line x1="24" y1="34" x2="24" y2="42" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="18" y1="42" x2="30" y2="42" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="contrib-sub">Content Platform · @sloanewellness</span>
+        <div class="contrib-title">$45K+/Month High-Margin Content Revenue</div>
+        <div class="contrib-body">Sloane's content platform generates high-margin, zero-inventory revenue through full-day brand takeovers — Stories, Reels, Lives, and feed posts targeting Sloane's premium GCC audience. At $1,500+/day across 30 days, this represents $45K+/month in content partnership revenue. Combined with Powder's 16K community and The Powder Room editorial, the merged platform becomes the most credible women's wellness editorial voice in the GCC — commanding premium rates from global beauty and lifestyle brands.</div>
+      </div>
+
+      <div class="contrib-card" style="border-top:2px solid var(--powder-rose); grid-column: 1 / -1; background: rgba(212,165,165,0.06);">
+        <svg class="contrib-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 38c0 0-10-6-10-16 0-5.5 4.5-10 10-10s10 4.5 10 10c0 10-10 16-10 16z" stroke="#D4A5A5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 12c0 0-8-4-12-1s-2 10 2 14" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+          <path d="M24 12c0 0 8-4 12-1s2 10-2 14" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+          <path d="M12 25c0 0-6 0-6-5s4-6 8-4" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <path d="M36 25c0 0 6 0 6-5s-4-6-8-4" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="24" y1="38" x2="24" y2="44" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+          <line x1="18" y1="44" x2="30" y2="44" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+        </svg>
+        <span class="contrib-sub">Philanthropic Pillar · wealthywomen.us</span>
+        <div class="contrib-title">A Registered DAF Vehicle — The Mission Behind the Merger</div>
+        <div class="contrib-body" style="max-width:800px;">WealthyWomen.us is the philanthropic organisation anchoring the merged entity's purpose. Operating with a registered Donor Advised Fund (DAF), it provides a formal, tax-efficient vehicle to raise philanthropic capital, host premium events, and fund programming around women's health, financial education, and wellness access. This is not a side project — it is the soul of the platform. It gives the combined Sloane × Powder brand a mission beyond commerce and resonates deeply with the GCC's growing ESG and values-led investment culture.</div>
+        <ul class="contrib-list" style="columns:2; gap:3rem; margin-top:1.5rem;">
+          <li>Registered DAF vehicle — tax-efficient philanthropic fundraising structure</li>
+          <li>Premium event hosting — women's health, wellness, and financial empowerment summits</li>
+          <li>Women's health programming — funding research, education, and advocacy across the GCC</li>
+          <li>Brand halo for ESG investors — values-led positioning for institutional Series A</li>
+          <li>Donor pipeline — HNW female donors become brand advocates and angel investors</li>
+          <li>Event cross-pollination — WealthyWomen.us events drive Powder product discovery</li>
+          <li>Series A narrative anchor — institutional investors increasingly require philanthropic positioning</li>
+          <li>Community activation — WealthyWomen.us members are the exact Powder premium consumer</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEMALE NETWORK — FEATURE SECTION -->
+<section class="bg-network">
+  <div class="inner">
+    <div class="section-label">The Unfair Advantage</div>
+    <div class="section-title">A network money<br><em>cannot buy</em></div>
+    <div class="section-desc">Rummana's network of powerful, high-net-worth women is the single most valuable intangible asset in this merger. It unlocks distribution, capital, press, partnerships, and acquisition conversations that no amount of marketing spend can replicate.</div>
+
+    <div class="network-grid">
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="18" width="32" height="22" rx="2" stroke="#C4A265" stroke-width="1.5"/>
+          <path d="M16 18v-4a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="28" x2="40" y2="28" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="21" y1="24" x2="21" y2="32" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="27" y1="24" x2="27" y2="32" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="n-title">GCC Wealth & Investment</div>
+        <div class="n-body">Direct relationships with female wealth principals and matriarchs of GCC family offices in Saudi Arabia, UAE, Qatar, and Kuwait. These women are the Series A audience — warm conversations, not cold outreach.</div>
+      </div>
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="16" stroke="#C4A265" stroke-width="1.5"/>
+          <ellipse cx="24" cy="24" rx="7" ry="16" stroke="#C4A265" stroke-width="1.2" opacity="0.6"/>
+          <line x1="8" y1="24" x2="40" y2="24" stroke="#C4A265" stroke-width="1.2" opacity="0.5"/>
+          <line x1="10" y1="16" x2="38" y2="16" stroke="#C4A265" stroke-width="1" opacity="0.3"/>
+          <line x1="10" y1="32" x2="38" y2="32" stroke="#C4A265" stroke-width="1" opacity="0.3"/>
+        </svg>
+        <div class="n-title">Global Venture & Media</div>
+        <div class="n-body">Shark Tank investor relationships, London Modest Fashion Week alumni across 45+ countries, WealthyWomen.us members, and female VC partners at top-tier funds across New York, London, and the Gulf.</div>
+      </div>
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 8c-8.8 0-16 7.2-16 16s7.2 16 16 16c-4-3-6-8-6-14 0-5.4 2-10 6-12-8 0-14 6.7-14 14" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M16 8c8.8 0 16 7.2 16 16s-7.2 16-16 16" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <polygon points="32,10 33.5,14 37.5,14 34.5,16.5 35.7,20.5 32,18 28.3,20.5 29.5,16.5 26.5,14 30.5,14" stroke="#D4A5A5" stroke-width="1" fill="none"/>
+        </svg>
+        <div class="n-title">Islamic Finance & Vision 2030</div>
+        <div class="n-body">Unique positioning in Shariah-compliant investment structures with direct access to Saudi Vision 2030 stakeholders and women's entrepreneurship councils — essential for GCC institutional fundraising.</div>
+      </div>
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 20v22h32V20" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 14l4-8h28l4 8" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 14c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M18 14c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M30 14c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="19" y="28" width="10" height="14" stroke="#C4A265" stroke-width="1.2"/>
+        </svg>
+        <div class="n-title">Retail & Commercial Gatekeepers</div>
+        <div class="n-body">Female C-suite relationships at Chalhoub Group, Landmark Holdings, GMG, and Alshaya — the gatekeepers of GCC luxury and wellness retail. These relationships compress a 2-year sales cycle into a single call.</div>
+      </div>
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38 8c-8 0-20 8-24 30" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M14 38c0 0 4-12 10-18" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+          <path d="M38 8c0 6-4 14-10 18" stroke="#C4A265" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+          <line x1="10" y1="40" x2="20" y2="40" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M10 44h8" stroke="#C4A265" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+          <circle cx="14" cy="38" r="1.5" fill="#D4A5A5"/>
+        </svg>
+        <div class="n-title">Press & Editorial Access</div>
+        <div class="n-body">Media relationships across Vogue Arabia, Harper's Bazaar Arabia, Grazia Middle East, and global modest fashion press. Editorial coverage that positions the merged platform as the GCC's premium wellness authority.</div>
+      </div>
+      <div class="nc">
+        <svg class="n-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 38s-14-8-14-18c0-5.5 4.5-10 10-10 2.2 0 4.2.7 5.8 1.9" stroke="#D4A5A5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 38s14-8 14-18c0-5.5-4.5-10-10-10-2.2 0-4.2.7-5.8 1.9" stroke="#D4A5A5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="18" r="3" stroke="#C4A265" stroke-width="1.2"/>
+          <line x1="24" y1="38" x2="24" y2="44" stroke="#D4A5A5" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+        <div class="n-title">WealthyWomen.us</div>
+        <div class="n-body">A registered philanthropic organisation with a Donor Advised Fund (DAF) vehicle — enabling the merged entity to raise capital, host premium events, and champion women's health topics. The philanthropic anchor that gives the platform a mission beyond commerce.</div>
+      </div>
+    </div>
+
+    <div class="network-quote">
+      <p>"The most powerful currency in business is not money. It is the room you can get into — and who opens the door."</p>
+      <cite>The Sloane × Powder Proposition</cite>
+    </div>
+  </div>
+</section>
+
+<!-- SYNERGY MAP -->
+<section class="bg-blush">
+  <div class="inner">
+    <div class="section-label">Synergy Map</div>
+    <div class="section-title">Where the magic<br><em>happens</em></div>
+    <div class="section-desc">The combination unlocks capabilities neither business can achieve alone — across distribution, community, capital, and brand access.</div>
+    <div style="margin-top:2rem;">
+      <div class="synergy-row" style="border-top:1px solid rgba(160,128,96,0.15);">
+        <div class="s-col left"><span class="s-brand">Sloane</span>VIP wellness box subscribers across Dubai, Saudi & Qatar — HNW audience</div>
+        <div class="s-plus">+</div>
+        <div class="s-col right"><span class="s-brand">Powder</span>Live e-commerce across 6 GCC markets with BNPL checkout and fulfillment infrastructure</div>
+      </div>
+      <div class="synergy-row">
+        <div class="s-col left"><span class="s-brand">Sloane</span>Emirates & Zedwell hotel pipeline — institutional-scale wellness contracts</div>
+        <div class="s-plus">+</div>
+        <div class="s-col right"><span class="s-brand">Powder</span>100+ curated clean brands already approved, sourced, and ready to fulfil immediately</div>
+      </div>
+      <div class="synergy-row">
+        <div class="s-col left"><span class="s-brand">Sloane</span>Rummana's female network — GCC family offices, Chalhoub, GMG, Vogue Arabia</div>
+        <div class="s-plus">+</div>
+        <div class="s-col right"><span class="s-brand">Powder</span>16K engaged community, The Powder Room editorial, brand ambassador network across GCC</div>
+      </div>
+      <div class="synergy-row">
+        <div class="s-col left"><span class="s-brand">Sloane</span>Vitality Capital — MENA family offices, Korea Development Bank, LG, NY Green Bank</div>
+        <div class="s-plus">+</div>
+        <div class="s-col right"><span class="s-brand">Powder</span>Operational platform with revenue track record, UAE Trade Licence, and GCC regulatory standing</div>
+      </div>
+      <div class="synergy-row">
+        <div class="s-col left"><span class="s-brand">Sloane</span>Barrière incubation — transdermal patches, GMG + 10 active retailer conversations</div>
+        <div class="s-plus">+</div>
+        <div class="s-col right"><span class="s-brand">Powder</span>Established supplements and skincare DTC channel with trusted, purchasing audience</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUITY STRUCTURE -->
+<section class="bg-dark">
+  <div class="inner">
+    <div class="section-label">Proposed Structure</div>
+    <div class="section-title">Equity &<br><em>Governance</em></div>
+    <div class="section-desc">A founder-led structure that preserves Powder's operational control while bringing institutional credibility, investor access, and a clear path to Series A and exit.</div>
+
+    <div class="equity-grid">
+      <div class="eq founders">
+        <div class="eq-pct">60<sup>%</sup></div>
+        <div class="eq-who">Powder Founders</div>
+        <div class="eq-desc">Ayat and co-founder retain majority control. They lead day-to-day operations, brand curation, and community. The platform they built remains theirs to run — this merger accelerates it, it does not acquire it.</div>
+      </div>
+      <div class="eq rummana">
+        <div class="eq-pct">30<sup>%</sup></div>
+        <div class="eq-who">Rummana Dada</div>
+        <div class="eq-desc">30% in exchange for the full Sloane platform — brand assets, hotel and airline pipeline, Barrière brand, VIP subscriber relationships, Vitality Capital network, and the female network that transforms the growth trajectory. Active board seat. Growth strategy, investor relations, and strategic partnership leadership.</div>
+      </div>
+      <div class="eq investors">
+        <div class="eq-pct">10<sup>%</sup></div>
+        <div class="eq-who">Vitality Capital Investors</div>
+        <div class="eq-desc">10% equity pool awarded across Vitality Capital's strategic investor group. Brings institutional credibility, co-investment potential, and warm access to the GCC's most important LP networks. Full buyout optionality retained by the company — see terms below.</div>
+      </div>
+    </div>
+
+    <div class="buyout-box">
+      <div>
+        <div class="buyout-label">Investor Buyout Clause</div>
+        <div class="buyout-title">Full option to repurchase the entire investor pool at any time</div>
+      </div>
+      <div class="buyout-stat">
+        <span class="buyout-num">1.5×</span>
+        <span class="buyout-sub">Buyout Multiple on Entry Value</span>
+      </div>
+      <div class="buyout-stat">
+        <span class="buyout-num">$200K</span>
+        <span class="buyout-sub">Total Buyout Price · Full 10% Pool</span>
+      </div>
+    </div>
+    <div class="buyout-note">
+      <p>The merged entity retains the right to repurchase the entire Vitality Capital investor pool at any time for a total consideration of <strong>$200,000</strong> — representing a <strong>1.5× return</strong> on the implied entry valuation of the investor shares. This clause gives Powder's founders complete long-term control optionality while offering investors a guaranteed minimum return and a clean exit mechanism. No investor consent required beyond standard board notification. Buyout must be executed in full — partial repurchases of individual investor positions may be arranged bilaterally at the Company's discretion.</p>
+    </div>
+
+    <div class="terms-grid">
+      <div class="tb">
+        <div class="tb-title">What Rummana Contributes for 30%</div>
+        <ul>
+          <li><strong>Sloane Wellness</strong> brand, IP, domain, and all digital assets</li>
+          <li><strong>Emirates Airline</strong> partnership pipeline — $14.7M Year 1 potential</li>
+          <li><strong>Zedwell Hotels</strong> white-label programme — 2,000+ rooms, live</li>
+          <li><strong>Barrière</strong> brand + GMG and 10 active retailer conversations</li>
+          <li><strong>VIP Box</strong> subscriber relationships — Dubai, KSA, Qatar</li>
+          <li><strong>Female Network</strong> — GCC HNW women, family offices, retail, media</li>
+          <li><strong>Vitality Capital</strong> LP and strategic partner relationships</li>
+          <li><strong>WealthyWomen.us</strong> DAF vehicle — philanthropic brand pipeline, events and women's health programming</li>
+          <li><strong>Board Seat</strong> + active growth, fundraising, and partnership role</li>
+        </ul>
+      </div>
+      <div class="tb">
+        <div class="tb-title">Investor Pool Terms (10% Total)</div>
+        <ul>
+          <li><strong>10% total</strong> pool issued as new shares at merger completion</li>
+          <li>Distributed across Vitality Capital's strategic LP group pro-rata</li>
+          <li><strong>No board seats</strong> — advisory and observer rights only</li>
+          <li><strong>Lock-up:</strong> 24 months from date of issuance</li>
+          <li>Pro-rata participation rights in any future funding round</li>
+          <li>Quarterly investor updates and consolidated financials</li>
+          <li><strong>Buyout option:</strong> $200,000 total at any time (1.5× multiple)</li>
+          <li>Full pool repurchase only — no partial buyouts without bilateral agreement</li>
+          <li>Positions Powder for credible, institutional Series A outreach</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REBRAND -->
+<section class="bg-light">
+  <div class="inner">
+    <div class="section-label">Brand Strategy</div>
+    <div class="section-title">Rebranding<br><em>the merged entity</em></div>
+    <div class="section-desc">The rebrand should honour both legacies while creating something distinctly new — premium, conscious, and built for women who demand both quality and values. Three directions to consider:</div>
+    <div class="rebrand-grid">
+      <div class="rb rec">
+        <span class="rb-badge">Recommended</span>
+        <div class="rb-name">Sloane<br>by Powder</div>
+        <div class="rb-body">Preserves Powder's community trust while elevating with Sloane's premium positioning. Dual-brand architecture: Powder for DTC community, Sloane for B2B — hotels, airlines, brand partnerships. Neither brand dies. Both amplify the other. Clean beauty lovers buy from Powder; corporates partner with Sloane.</div>
+        <div class="rb-tag">Sub-brand architecture · Dual identity · Low friction</div>
+      </div>
+      <div class="rb">
+        <div class="rb-name">Conscious<br>House</div>
+        <div class="rb-body">A clean break — a new name carrying no legacy baggage from either brand. "Conscious House" positions the merged entity as the destination for conscious beauty and wellness in the GCC. Maximum flexibility for a new shared chapter. Ideal if both teams want to build under a single, entirely new identity.</div>
+        <div class="rb-tag">Full rebrand · Fresh start · Maximum flexibility</div>
+      </div>
+      <div class="rb">
+        <div class="rb-name">Powder<br>Wellness</div>
+        <div class="rb-body">Expands Powder's existing brand equity into the wellness category where the B2B opportunity lies — hotels, supplements, institutional distribution. Lowest-cost rebrand with highest community continuity. Strongest choice if Powder's community recognition is considered the anchor asset.</div>
+        <div class="rb-tag">Brand extension · Minimal cost · Community-first</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROWTH ROADMAP -->
+<section class="bg-espresso">
+  <div class="inner">
+    <div class="section-label">The Roadmap</div>
+    <div class="section-title">How we accelerate<br><em>together</em></div>
+    <div class="section-desc">A phased strategy that unlocks revenue quickly, builds the platform, and positions the combined entity for institutional investment within 18 months.</div>
+    <div style="margin-top:2rem;">
+      <div class="phase">
+        <div class="phase-num">01</div>
+        <div>
+          <div class="phase-timeline">Months 1–3 · Foundation</div>
+          <div class="phase-title">Merge, rebrand, and align</div>
+          <div class="phase-body">Finalise equity documentation and legal structure including investor buyout clause. Agree rebrand direction. Integrate Sloane's VIP box subscribers into Powder's platform as a premium tier. Launch co-branded presence. Begin female network introductions to Powder's brand and investor conversations.</div>
+          <ul class="phase-bullets">
+            <li>Legal: equity issuance, IP transfer, shareholder agreement with buyout clause</li>
+            <li>Co-branded social launch — combined audiences, merged editorial calendar</li>
+            <li>Founder announcement video — both teams to both communities</li>
+            <li>First network introductions: GCC family offices, Chalhoub, GMG leadership</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">02</div>
+        <div>
+          <div class="phase-timeline">Months 3–6 · Revenue Activation</div>
+          <div class="phase-title">Convert the pipeline</div>
+          <div class="phase-body">Use Powder's brand network to fulfil the Zedwell hotel programme immediately. Push Barrière to close with GMG using combined platform credibility. Launch expanded 250-box GCC wellness subscription. Begin Emirates Airline discussions using combined entity credentials and Rummana's warm introduction.</div>
+          <ul class="phase-bullets">
+            <li>Zedwell: source hotel box products directly from Powder's supplier relationships</li>
+            <li>Barrière: list on Powder DTC + close GMG retail contract</li>
+            <li>Expand wellness box to 250/month across UAE, KSA, Qatar priority markets</li>
+            <li>Emirates: formal proposal submitted via female network warm introduction</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">03</div>
+        <div>
+          <div class="phase-timeline">Months 6–12 · Platform Build</div>
+          <div class="phase-title">Build the flywheel</div>
+          <div class="phase-body">Consistent cashflow from boxes, hotel programme, and content partnerships funds platform development. Launch brand incubation programme. Begin Series A narrative development with Vitality Capital's LP network and Rummana's GCC HNW investor introductions. Explore Saudi market expansion.</div>
+          <ul class="phase-bullets">
+            <li>Second hotel partner: Vida Hotels or Marriott GCC approached via female network</li>
+            <li>Incubate 2 WealthyWomen.us-sourced brands into Sloane distribution</li>
+            <li>Series A deck — target $3–5M at $15–20M valuation</li>
+            <li>Saudi expansion with SIDF or women's entrepreneurship council partner</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">04</div>
+        <div>
+          <div class="phase-timeline">Months 12–24 · Scale & Exit Optionality</div>
+          <div class="phase-title">Institutional scale</div>
+          <div class="phase-body">Close Series A. Emirates contract (if secured) transforms the revenue profile entirely. At $10M+ ARR the platform becomes a highly attractive acquisition target for Chalhoub Group, GMG, or a regional wellness conglomerate. The investor pool buyout can be triggered by Powder's founders at their full discretion for $200,000 — restoring clean cap table ahead of a strategic exit.</div>
+          <ul class="phase-bullets">
+            <li>M&A optionality: Chalhoub Group, GMG, Alshaya, or wellness conglomerate</li>
+            <li>Target: $10M+ ARR, 40%+ gross margin</li>
+            <li>UK expansion leveraging Sloane's London presence and Zedwell relationship</li>
+            <li>Investor pool buyout triggered at founders' discretion ($200K — clean cap table for exit)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE -->
+<section class="bg-light">
+  <div class="inner">
+    <div class="section-label">Financial Picture</div>
+    <div class="section-title">Revenue at<br><em>combined scale</em></div>
+    <div class="section-desc">Conservative projections based on current pipelines from both businesses. The combined entity activates all streams simultaneously from Day 1.</div>
+    <div class="revenue-grid">
+      <div class="rc">
+        <div class="rc-num">$120K+</div>
+        <div class="rc-label">Annual Box Revenue</div>
+        <div class="rc-desc">250 boxes/month across 6 GCC markets at $40 average ticket. Scales to 1,000 boxes within Year 1 with combined audience and female network distribution.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$540K+</div>
+        <div class="rc-label">Content Partnerships / Year</div>
+        <div class="rc-desc">Combined social platform, brand takeovers and editorial partnerships. $1,500–$5,000 per activation across 30 available days monthly at increased combined reach.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$2M+</div>
+        <div class="rc-label">Hotel & Retail Year 1</div>
+        <div class="rc-desc">Zedwell programme plus 2–3 additional GCC hotel partners. Barrière retail distribution adds incremental margin from launch. Live revenue from Day 1.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$14.7M</div>
+        <div class="rc-label">Emirates Potential Year 1</div>
+        <div class="rc-desc">Combined entity credentials and female network warm introduction makes this significantly more achievable. 420,000 premium passenger boxes at $35/unit changes the company trajectory.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-title">The GCC's most powerful<br><em>women's wellness platform.</em></div>
+  <div class="cta-sub">Built by women. Backed by conviction. Designed for scale.</div>
+  <p style="font-size:0.72rem; font-weight:300; letter-spacing:0.18em; color:#fff;">SLOANE × POWDER · CONFIDENTIAL · FOR DISCUSSION ONLY · FEBRUARY 2026</p>
+</div>
+
+<footer>SLOANE WELLNESS × POWDER BEAUTY &nbsp;·&nbsp; DUBAI &nbsp;·&nbsp; LONDON &nbsp;·&nbsp; 2026</footer>
+
+</body>
+</html>
